@@ -58,16 +58,37 @@ namespace FirstWebAPI.Controllers
             _repositoryEmployee.AddNewEmployee(employee);
             return 1;
         }
-        [HttpPut]
-        public Employee EditEmployee(int id , [FromBody] Employee updatedEmployee)
+        [HttpPut("/EditEmployee")]
+        public void EditEmployee([FromBody] EmployeeViewModel updatedEmployee)
         {
-            
-            updatedEmployee.EmployeeId = id; // Ensure the ID in the URL matches the EmployeeId
+            Employee employee = new Employee() 
+            {
+                EmployeeId = updatedEmployee.EmpId, FirstName = updatedEmployee.FirstName, LastName = updatedEmployee.LastName,BirthDate = updatedEmployee.BirthDate,
+                HireDate = updatedEmployee.HireDate,City = updatedEmployee.City, ReportsTo = updatedEmployee.ReportsTo ,Title = updatedEmployee.Title
+            };
 
-            Employee savedEmployee = _repositoryEmployee.UpdateEmployee(updatedEmployee);
-            return savedEmployee;
+            _repositoryEmployee.UpdateEmployee(employee);
         }
-        [HttpDelete]
+        //[HttpPut("UpdateEmployee")]
+        //public IActionResult UpdateEmployee(int id, [FromBody] EmployeeViewModel employee)
+        //{
+        //    try
+        //    {
+        //        Employee tempemp = _repositoryEmployee.MapEmpViewModelToEmployee(employee);
+        //        tempemp.EmployeeId = id;
+        //        int result = _repositoryEmployee.UpdateEmployee(tempemp);
+        //        if (result == 0)
+        //        {
+        //            return NotFound("Employee not found");
+        //        }
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Internal Server Error: " + ex.Message);
+        //    }
+        //}
+        [HttpDelete("/DeleteEmployee")]
         public int DeleteEmployee(int id)
         {
             _repositoryEmployee.DeleteEmployee(id);
